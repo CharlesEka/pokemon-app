@@ -4,6 +4,8 @@ import styled from '@emotion/styled'
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import PropTypes from 'prop-types'
 import Pokeball from './Pokeball'
+import { Callbacks } from "jquery";
+import { Button } from "bootstrap";
 
 PokemonCard.propTypes = {
     pokemonId: PropTypes.number.isRequired,
@@ -18,7 +20,7 @@ PokemonCard.defaultProps={
     pokemonOwned: false
 }
 
-export default function PokemonCard({pokemonId, pokemonName, pokemonImage, pokemonOwned}){   
+export default function PokemonCard({pokemonId, pokemonName, pokemonImage, pokemonOwned,callback,callbackButtonLabel}){   
     let isOwned = pokemonOwned ? pokemonOwned : false;
     let pokeballColorType = isOwned ? 'red-white' : 'lightgrey';
     
@@ -80,7 +82,11 @@ export default function PokemonCard({pokemonId, pokemonName, pokemonImage, pokem
                 <div className={css`padding: 0`+' col-7'}>
                     <PokemonCardData>
                         <PokemonCardName className={css`font-family: roboto-black;`}>{pokemonName}</PokemonCardName>
-                        <PokemonCardId>#{pokemonId}</PokemonCardId>
+                        {
+                            callback && callbackButtonLabel ?
+                            <button className="btn btn-warning" onClick={( () => callback(pokemonId,pokemonName) )}>{callbackButtonLabel}</button>:
+                            <PokemonCardId>#{pokemonId}</PokemonCardId>
+                        }
                     </PokemonCardData>
                 </div>
             </PokemonCardBody>

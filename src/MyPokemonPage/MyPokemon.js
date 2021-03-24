@@ -6,6 +6,7 @@ import ContentLoader from '../SharedComponents/ContentLoader';
 import { css } from '@emotion/css'
 import styled from '@emotion/styled'
 import { useHistory } from 'react-router-dom';
+import {releasePokemon} from '../SharedFunction/pokemonLocalDB'
 
 export default function MyPokemon(){
     const history = useHistory();
@@ -85,6 +86,8 @@ export default function MyPokemon(){
 const MemoPokemonCard = React.memo(MyPokemonCard);
 
 function MyPokemonCard({pokemonName, pokemonCustomName, pokemonId}){
+    const {myPokemonContext} = useContext(GlobalContext)
+
     const GET_POKEMON = gql`
     query pokemon($name: String!) {
         pokemon(name: $name) {
@@ -102,8 +105,15 @@ function MyPokemonCard({pokemonName, pokemonCustomName, pokemonId}){
         },
     });
 
+    async function release(pokemonId,pokemonCustomName){
+        await releasePokemon(pokemonId,pokemonCustomName);
+        myPokemonContext.refreshMyPokemon();
+    }
+
     return (
         <PokemonCard 
+            callback={release}
+            callbackButtonLabel={"release"}
             pokemonId={pokemonId} 
             pokemonName={pokemonCustomName} 
             pokemonImage={data ? data.pokemon.sprites.front_default : undefined}

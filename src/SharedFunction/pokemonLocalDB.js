@@ -1,4 +1,5 @@
 import Localbase from 'localbase'
+import { func } from 'prop-types';
 
 export async function getAllPokemonGroupByKey(){
     let db = new Localbase('db');
@@ -14,6 +15,11 @@ export async function getAllPokemonGroupByKey(){
     );
 
     return result;
+}
+
+export async function releasePokemon(pokemonId,pokemonCustomName){
+    let db = new Localbase('db');
+    await db.collection('myPokemon').doc({ pokemonId: pokemonId, pokemonCustomName: pokemonCustomName }).delete()
 }
 
 export function addPokemon(pokemonId,pokemonName,pokemonCustomName){
