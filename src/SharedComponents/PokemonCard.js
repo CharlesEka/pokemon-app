@@ -4,7 +4,6 @@ import styled from '@emotion/styled'
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import PropTypes from 'prop-types'
 import Pokeball from './Pokeball'
-import {titleCase} from '../SharedFunction/sentenceFunction';
 
 PokemonCard.propTypes = {
     pokemonId: PropTypes.number.isRequired,
@@ -20,7 +19,6 @@ PokemonCard.defaultProps={
 }
 
 export default function PokemonCard({pokemonId, pokemonName, pokemonImage, pokemonOwned}){   
-    let pokemonNameTitleCase = titleCase(pokemonName);
     let isOwned = pokemonOwned ? pokemonOwned : false;
     let pokeballColorType = isOwned ? 'red-white' : 'lightgrey';
     
@@ -81,7 +79,7 @@ export default function PokemonCard({pokemonId, pokemonName, pokemonImage, pokem
                 </PokemonCardImageDiv>
                 <div className={css`padding: 0`+' col-7'}>
                     <PokemonCardData>
-                        <PokemonCardName className={css`font-family: roboto-black;`}>{pokemonNameTitleCase}</PokemonCardName>
+                        <PokemonCardName className={css`font-family: roboto-black;`}>{pokemonName}</PokemonCardName>
                         <PokemonCardId>#{pokemonId}</PokemonCardId>
                     </PokemonCardData>
                 </div>

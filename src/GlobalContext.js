@@ -19,7 +19,8 @@ export const GlobalProvider = props => {
         fetchMore: undefined,
     });
     const [myPokemonContext, setMyPokemonContext] = useState({
-        data : undefined
+        data : undefined,
+        refreshMyPokemon: refreshMyPokemon
     })
 
     /**=========================================================
@@ -83,11 +84,20 @@ export const GlobalProvider = props => {
     useEffect(() => {
         getAllPokemonGroupByKey().then( 
         MyPokemon =>{
-            setMyPokemonContext({data: MyPokemon});
+            setMyPokemonContext(prevMyPokemonContext => ({...prevMyPokemonContext, data: MyPokemon}));
         }).catch(e =>{
             console.error(e);
         })
     },[])
+
+    function refreshMyPokemon(){
+        getAllPokemonGroupByKey().then( 
+        MyPokemon =>{
+            setMyPokemonContext(prevMyPokemonContext => ({...prevMyPokemonContext, data: MyPokemon}));
+        }).catch(e =>{
+            console.error(e);
+        })
+    }
 
     /**=========================================================
      * RETURN

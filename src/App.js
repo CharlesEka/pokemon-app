@@ -9,6 +9,7 @@ import {GlobalProvider} from "./GlobalContext";
 import MyPokemon from "./MyPokemonPage/MyPokemon"
 import PokemonList from "./PokemonListPage/PokemonList"
 import PokemonDetail from "./PokemonDetailPage/PokemonDetail"
+import CatchPokemon from './CatchPokemonPage/CatchPokemon';
 
 const errorLink = onError(({graphqlErrors, networkError, path}) => {
   if(graphqlErrors){
@@ -40,6 +41,7 @@ function App() {
                   <Route exact path="/"> <PokemonList /> </Route>
                   <Route path="/pokemon/:name/detail"> <PokemonDetail /> </Route>
                   <Route path="/my-pokemon"> <MyPokemon /> </Route>
+                  <Route path="/catch/:name"> <CatchPokemon /> </Route>
                 </Switch>
               </div>
             </div>

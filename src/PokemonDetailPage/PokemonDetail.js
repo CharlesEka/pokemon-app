@@ -118,6 +118,7 @@ export default function PokemonDetail(){
                     </div>
                 </div>
                 <CatchPokemonButton 
+                    pokemonName={pokemon.name ? pokemon.name : ''}
                     pokemonType={ pokemon.types ? pokemon.types !== null ? pokemon.types[0].type.name : undefined: undefined} />
             </Fragment>
             

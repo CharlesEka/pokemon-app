@@ -1,5 +1,60 @@
 import Localbase from 'localbase'
 
+export async function getAllPokemonGroupByKey(){
+    let db = new Localbase('db');
+    db.config.debug = false;
+    
+    let result = {};
+    
+    await db.collection('myPokemon').get().then(
+        pokemons =>{
+            result.data = groupBy(pokemons,'pokemonId');
+            result.count = pokemons.length;
+        }
+    );
+
+    return result;
+}
+
+export function addPokemon(pokemonId,pokemonName,pokemonCustomName){
+    let promise = new Promise( (resolve,reject) => {
+        let db = new Localbase('db')
+        isPokemonCustomNameUnique(pokemonId,pokemonCustomName).then(
+            async isUnique => {
+                if(isUnique){
+                    await db.collection('myPokemon').add({
+                        pokemonId: pokemonId,
+                        pokemonName: pokemonName,
+                        pokemonCustomName : pokemonCustomName
+                    })
+        
+                    resolve(`${pokemonName} is obtained`);
+                }else{
+                    reject(`the name has been taken by another ${pokemonName}`);
+                }
+            }
+        ).catch(
+            e => reject(`look like something went wrong`)
+        );
+    });
+    return promise;
+}
+
+async function isPokemonCustomNameUnique(pokemonId,pokemonCustomName){
+    let db = new Localbase('db');
+    db.config.debug = false;
+    
+    let result = false;
+    
+    await db.collection('myPokemon').doc({ pokemonId: pokemonId, pokemonCustomName: pokemonCustomName }).get().then(
+        pokemon =>{
+            result = pokemon ? false : true;
+        }
+    );
+
+    return result;
+}
+
 function groupBy(objectArray, property) {
     let list = [];
     objectArray.map((obj) => {
@@ -12,71 +67,3 @@ function groupBy(objectArray, property) {
     },  {});
     return list;
 }
-
-// function addPokemon(){
-    // let promise = new Promise( (resolve,reject) => {
-    //     let db = new Localbase('db')
-    //     db.collection('myPokemon').add({
-    //         pokemonId: pokemon.pokemonId,
-    //         pokemonName: pokemon.pokemonName,
-    //         pokemonCustomName : pokemon.pokemonCustomName
-    //     })
-    //     if(messageStatus.ok)
-    //         resolve(messageStatus);
-    //     else
-    //         reject(messageStatus);
-    // });
-    // return promise;
-// }
-
-export async function getAllPokemonGroupByKey(){
-    let db = new Localbase('db')
-    let result = {};
-    
-    await db.collection('myPokemon').get().then(
-        pokemons =>{
-            result.data = groupBy(pokemons,'pokemonId');
-            result.count = pokemons.length;
-        }
-    );
-
-    return result;
-} 
-
-// function getPokemon(pokemonId){
-
-// }
-
-
-export function addDummy(){
-    let db = new Localbase('db')
-
-    db.collection('myPokemon').add({
-    pokemonId: 2,
-    pokemonName: "ivysaur",
-    pokemonCustomName : "Ivysaur 1"
-});
-
-db.collection('myPokemon').add({
-    pokemonId: 2,
-    pokemonName: "ivysaur",
-    pokemonCustomName : "Ivysaur 2"
-});
-
-db.collection('myPokemon').add({
-    pokemonId: 2,
-    pokemonName: "ivysaur",
-    pokemonCustomName : "Ivysaur 3"
-});
-
-db.collection('myPokemon').add({
-    pokemonId: 10,
-    pokemonName: "caterpie",
-    pokemonCustomName : "Caterpie 1"
-});
-
-db.collection('myPokemon').add({
-    pokemonId: 17,
-    pokemonName: "pidgeotto",
-    pokemonCustomName : "Pidgeotto 3"
-});}
