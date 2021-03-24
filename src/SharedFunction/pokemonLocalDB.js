@@ -1,15 +1,16 @@
 import Localbase from 'localbase'
 
 function groupBy(objectArray, property) {
-    return objectArray.reduce((acc, obj) => {
+    let list = [];
+    objectArray.map((obj) => {
         const key = obj[property];
-        if (!acc[key]) {
-            acc[key] = [];
+        if (!list[key]) {
+            list[key] = [];
         }
        // Add object to list for given key's value
-        acc[key].push(obj);
-        return acc;
+        list[key].push(obj);
     },  {});
+    return list;
 }
 
 // function addPokemon(){

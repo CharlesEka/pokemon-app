@@ -1,5 +1,6 @@
 import React, {Fragment, useContext } from "react";
 import { css } from '@emotion/css'
+import { useHistory } from 'react-router-dom';
 import PokemonCard from '../SharedComponents/PokemonCard';
 import ContentLoader from '../SharedComponents/ContentLoader';
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -8,7 +9,13 @@ import FailedLoadData from '../SharedComponents/FailedLoadData';
 
 export default function PokemonListContent(){
     const {myPokemonContext, pokemonContext} = useContext(GlobalContext)
-    
+    const history = useHistory();
+
+    const routeChange = (pokemonName) =>{ 
+        let path = `/pokemon/${pokemonName}/detail`; 
+        history.push(path);
+    }
+
     if(pokemonContext.data){
         return (
             <Fragment>
@@ -31,12 +38,14 @@ export default function PokemonListContent(){
                             if(pokemon.id in myPokemonContext.data.data)
                                 owned = true;
                         }
-                        return <MemoPokemonCard 
-                            key={pokemon.id}
-                            pokemonId={pokemon.id} 
-                            pokemonName={pokemon.name} 
-                            pokemonImage={pokemon.image}
-                            pokemonOwned={owned}/>
+                        return <div onClick={() => {routeChange(pokemon.name)}} className="col-xl-3 col-lg-4 col-sm-6 col-12">
+                            <MemoPokemonCard 
+                                key={pokemon.id}
+                                pokemonId={pokemon.id} 
+                                pokemonName={pokemon.name} 
+                                pokemonImage={pokemon.image}
+                                pokemonOwned={owned}/>
+                        </div>
                     })}
                 
                 </InfiniteScroll>

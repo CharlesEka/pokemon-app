@@ -1,12 +1,18 @@
 import React, { Fragment,useContext } from "react";
+import { useHistory } from 'react-router-dom';
 import { css } from '@emotion/css'
 import styled from '@emotion/styled'
 import Pokeball from "../SharedComponents/Pokeball";
 import GlobalContext from '../GlobalContext';
+import { Callbacks } from "jquery";
 
 export default function PokemonListStats(){
     const {myPokemonContext, pokemonContext} = useContext(GlobalContext)
+    const history = useHistory();
 
+    const goToMyPokemonRoute = () =>{ 
+        history.push('/my-pokemon');
+    }
     return (
         <Fragment>
             <div className={css`margin-top: 130px;`}>
@@ -17,6 +23,7 @@ export default function PokemonListStats(){
                     <StatsNumberBlock statsName='Species Owned' 
                         statsValue={myPokemonContext.data ? Object.keys(myPokemonContext.data.data).length : 0}/>
                     <StatsNumberBlock statsName='My Pokemon' 
+                        callback={goToMyPokemonRoute}
                         statsValue={myPokemonContext.data ? myPokemonContext.data.count : 0} statsColor='red'/>
                 </div>
             </div>
@@ -24,7 +31,7 @@ export default function PokemonListStats(){
     )
 }
 
-function StatsNumberBlock({statsColor,statsName,statsValue}){
+function StatsNumberBlock({statsColor,statsName,statsValue, callback}){
     const fontColor = statsColor === 'red' ? 'white' : 'black';
     const backgroundColor = statsColor === 'red' ? '#fc5757' : 'lightgrey';
     const pokeballColor = statsColor === 'red' ? 'lightcoral' : 'white';
@@ -61,7 +68,7 @@ function StatsNumberBlock({statsColor,statsName,statsValue}){
     
     return (
         <div className="col-6 col-xl-4 mt-4">
-            <PokemonsIndicator>
+            <PokemonsIndicator onClick={() => callback ? callback() : ''}>
                 <Pokeball type={pokeballColor} />
                 <PokemonsIndicatorNumber className={css`font-size: large;`}>
                     <Name>{statsName}</Name>

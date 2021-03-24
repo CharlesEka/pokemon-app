@@ -1,6 +1,5 @@
 import React from "react";
-import { useHistory } from 'react-router-dom';
-import { css, keyframes  } from '@emotion/css'
+import { css  } from '@emotion/css'
 import styled from '@emotion/styled'
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import PropTypes from 'prop-types'
@@ -21,15 +20,12 @@ PokemonCard.defaultProps={
 }
 
 export default function PokemonCard({pokemonId, pokemonName, pokemonImage, pokemonOwned}){   
-    const history = useHistory();
-
     let pokemonNameTitleCase = titleCase(pokemonName);
     let isOwned = pokemonOwned ? pokemonOwned : false;
     let pokeballColorType = isOwned ? 'red-white' : 'lightgrey';
     
     const PokemonCard = styled.div`
-        padding: 0;
-        padding: 0.5rem;
+        padding: 0.5rem 0;
     `
     
     const PokemonCardBody = styled.div`
@@ -71,14 +67,9 @@ export default function PokemonCard({pokemonId, pokemonName, pokemonImage, pokem
         font-weight: bold;
     `
 
-    const routeChange = () =>{ 
-        let path = `/pokemon/${pokemonName}/detail`; 
-        history.push(path);
-    }
-
     return(
-        <PokemonCard className="col-xl-3 col-lg-4 col-sm-6 col-12" key={pokemonId}>
-            <PokemonCardBody className="row" onClick={routeChange}>
+        <PokemonCard>
+            <PokemonCardBody className="row">
                 <PokemonCardImageDiv className="col-5">
                     <Pokeball type={pokeballColorType}/>
                     <LazyLoadImage className={css`${PokemonCardImage}`}
