@@ -5,6 +5,7 @@ import PokemonListStats from "./PokemonListStats"
 import PokemonListContent from "./PokemonListContent"
 
 export default function PokemonList(){
+
     return (
         <Fragment>
             <PokemonListHeader/>
@@ -14,4 +15,5 @@ export default function PokemonList(){
             </div>
         </Fragment>
     )
+    
 }

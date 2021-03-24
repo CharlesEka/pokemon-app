@@ -1,27 +1,33 @@
-import React, { Fragment } from "react";
+import React, { Fragment,useContext } from "react";
 import { css } from '@emotion/css'
 import styled from '@emotion/styled'
-import PokeballComponent from "../SharedComponents/PokeballComponent";
+import Pokeball from "../SharedComponents/Pokeball";
+import GlobalContext from '../GlobalContext';
 
 export default function PokemonListStats(){
+    const {myPokemonContext, pokemonContext} = useContext(GlobalContext)
+
     return (
         <Fragment>
             <div className={css`margin-top: 130px;`}>
                 <div className={ css`height: 30px;`}></div>
                 <div className="row mb-4">
-                    <StatsNumberBlock statsName='All Species' statsValaue='100' statsColor=''/>
-                    <StatsNumberBlock statsName='Species Owned' statsValaue='100' statsColor=''/>
-                    <StatsNumberBlock statsName='My Pokemon' statsValaue='100' statsColor='red'/>
+                    <StatsNumberBlock statsName='All Species' 
+                        statsValue={pokemonContext.data ? pokemonContext.data.count : 0}/>
+                    <StatsNumberBlock statsName='Species Owned' 
+                        statsValue={myPokemonContext.data ? Object.keys(myPokemonContext.data.data).length : 0}/>
+                    <StatsNumberBlock statsName='My Pokemon' 
+                        statsValue={myPokemonContext.data ? myPokemonContext.data.count : 0} statsColor='red'/>
                 </div>
             </div>
         </Fragment>
     )
 }
 
-function StatsNumberBlock(props){
-    const fontColor = props.statsColor === 'red' ? 'white' : 'black';
-    const backgroundColor = props.statsColor === 'red' ? '#fc5757' : 'lightgrey';
-    const pokeballColor = props.statsColor === 'red' ? 'lightcoral' : 'white';
+function StatsNumberBlock({statsColor,statsName,statsValue}){
+    const fontColor = statsColor === 'red' ? 'white' : 'black';
+    const backgroundColor = statsColor === 'red' ? '#fc5757' : 'lightgrey';
+    const pokeballColor = statsColor === 'red' ? 'lightcoral' : 'white';
 
     const PokemonsIndicator = styled.div`
         position: relative; 
@@ -56,11 +62,11 @@ function StatsNumberBlock(props){
     return (
         <div className="col-6 col-xl-4 mt-4">
             <PokemonsIndicator>
-                <PokeballComponent type={pokeballColor} />
+                <Pokeball type={pokeballColor} />
                 <PokemonsIndicatorNumber className={css`font-size: large;`}>
-                    <Name>{props.statsName}</Name>
+                    <Name>{statsName}</Name>
                     <br />
-                    <Number>100</Number>
+                    <Number>{statsValue}</Number>
                 </PokemonsIndicatorNumber>
             </PokemonsIndicator>
         </div>

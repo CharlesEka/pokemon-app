@@ -2,15 +2,15 @@ import React, { Fragment } from "react"
 import styled from '@emotion/styled'
 import PropTypes from 'prop-types'
 
-PokeballComponent.propTypes = {
+Pokeball.propTypes = {
     type: PropTypes.oneOf(['lightcoral', 'lightgrey', 'white', 'red-white']).isRequired
 }
 
-PokeballComponent.defaultProps={
+Pokeball.defaultProps={
     type:'lightgrey'
 }
 
-export default function PokeballComponent({type}){
+export default function Pokeball({type}){
     let upperColor = null;
     let lowerColor = null;
 

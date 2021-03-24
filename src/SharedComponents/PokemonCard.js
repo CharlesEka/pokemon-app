@@ -1,20 +1,30 @@
 import React from "react";
-import { css } from '@emotion/css'
+import { useHistory } from 'react-router-dom';
+import { css, keyframes  } from '@emotion/css'
 import styled from '@emotion/styled'
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-import 'react-lazy-load-image-component/src/effects/black-and-white.css';
 import PropTypes from 'prop-types'
-import PokeballComponent from '../SharedComponents/PokeballComponent'
+import Pokeball from './Pokeball'
+import {titleCase} from '../SharedFunction/sentenceFunction';
 
-PokemonListItem.propTypes = {
+PokemonCard.propTypes = {
     pokemonId: PropTypes.number.isRequired,
     pokemonName: PropTypes.string.isRequired,
-    pokemonImage: PropTypes.string.isRequired
+    pokemonImage: PropTypes.string.isRequired,
+    pokemonOwned: PropTypes.bool.isRequired
 }
 
-export default function PokemonListItem({pokemonId, pokemonName, pokemonImage}){    
-    let pokemonNameTitleCase = pokemonName.charAt(0).toUpperCase() + pokemonName.substr(1).toLowerCase();
-    let isOwned = false;
+PokemonCard.defaultProps={
+    pokemonId: "",
+    pokemonName: "",
+    pokemonOwned: false
+}
+
+export default function PokemonCard({pokemonId, pokemonName, pokemonImage, pokemonOwned}){   
+    const history = useHistory();
+
+    let pokemonNameTitleCase = titleCase(pokemonName);
+    let isOwned = pokemonOwned ? pokemonOwned : false;
     let pokeballColorType = isOwned ? 'red-white' : 'lightgrey';
     
     const PokemonCard = styled.div`
@@ -61,11 +71,16 @@ export default function PokemonListItem({pokemonId, pokemonName, pokemonImage}){
         font-weight: bold;
     `
 
+    const routeChange = () =>{ 
+        let path = `/pokemon/${pokemonName}/detail`; 
+        history.push(path);
+    }
+
     return(
         <PokemonCard className="col-xl-3 col-lg-4 col-sm-6 col-12" key={pokemonId}>
-            <PokemonCardBody className="row">
+            <PokemonCardBody className="row" onClick={routeChange}>
                 <PokemonCardImageDiv className="col-5">
-                    <PokeballComponent type={pokeballColorType}/>
+                    <Pokeball type={pokeballColorType}/>
                     <LazyLoadImage className={css`${PokemonCardImage}`}
                         alt={pokemonName}
                         src={pokemonImage}

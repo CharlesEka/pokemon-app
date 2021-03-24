@@ -4,6 +4,7 @@ import React from "react";
 import {BrowserRouter as Router, Switch, Route,} from "react-router-dom";
 import {ApolloClient, InMemoryCache, ApolloProvider, HttpLink, from} from "@apollo/client"
 import {onError} from "@apollo/client/link/error";
+import {GlobalProvider} from "./GlobalContext";
 
 import MyPokemon from "./MyPokemonPage/MyPokemon"
 import PokemonList from "./PokemonListPage/PokemonList"
@@ -12,7 +13,8 @@ import PokemonDetail from "./PokemonDetailPage/PokemonDetail"
 const errorLink = onError(({graphqlErrors, networkError, path}) => {
   if(graphqlErrors){
     graphqlErrors.map(({message, location, path}) => {
-      console.error(`graphql error ${message}| location : ${location}| path : ${path}`)
+      console.error(`graphql error ${message}| location : ${location}| path : ${path}`);
+      return `graphql error ${message}| location : ${location}| path : ${path}`;
     })
   }
 })
@@ -27,21 +29,24 @@ const client = new ApolloClient({
   link: link,
 });
 
-export default function App() {
+function App() {
   return (
-    <ApolloProvider client={client}>
-      <Router>
-        <div className="App">
-          <div className="content">
-            <Switch>
-              <Route exact path="/"> <PokemonList /> </Route>
-              <Route path="/pokemon/:id/detail"> <PokemonDetail /> </Route>
-              <Route path="/my-pokemon"> <MyPokemon /> </Route>
-            </Switch>
-          </div>
-        </div>
-      </Router>
-    </ApolloProvider>
+      <ApolloProvider client={client}>
+        <GlobalProvider>
+          <Router>
+            <div className="App">
+              <div className="content">
+                <Switch>
+                  <Route exact path="/"> <PokemonList /> </Route>
+                  <Route path="/pokemon/:name/detail"> <PokemonDetail /> </Route>
+                  <Route path="/my-pokemon"> <MyPokemon /> </Route>
+                </Switch>
+              </div>
+            </div>
+          </Router>
+        </GlobalProvider>
+      </ApolloProvider>
   );
 }
 
+export default App;
